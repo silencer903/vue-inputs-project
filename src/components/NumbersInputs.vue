@@ -1,11 +1,11 @@
 <template>
-    <div class="numbers-inputs" >
+    <div class="numbers-inputs">
         <div class="numbers-inputs-row"
                 v-for="(inputElement, index) of inputsList" >
             <div class="number-inputs-label">
                 {{inputElement.label}}
             </div>
-            <div class="number-inputs-values">
+            <div class="number-inputs-values" v-click-outside="cancelInput">
                 <div class="number-inputs-value"
                      v-show="!inputElement.isEdit"
                      v-on:click="changeInputs({indexShow: index})">
@@ -16,9 +16,8 @@
                         &lsaquo;
                     </div>
                 </div>
-                <div class="number-inputs-values-input" v-show="inputElement.isEdit">
+                <div class="number-inputs-values-input"  v-show="inputElement.isEdit" >
                     <input  class="number-input" :ref="'inputElements'" type="number"
-                            @focusout="cancelInput({})"
                             @input="inputElement.synchValue ? synchInputsValues($event.target.value) : ''"
                             v-on:keyup.enter="saveInput({indexSave: index})"
                             v-on:keyup.esc="cancelInput({})"
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-
     export default {
         name: "numbers-inputs",
         data(){
