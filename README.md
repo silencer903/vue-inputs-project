@@ -8,4 +8,4 @@
 6. Контролл 3 не имеет команд
 7. По нажатию Tab/Shift-Tab происходит обход контроллов по кругу вперед и назад соответственно
 
-[Демо(https://silencer903.github.io/vue-inputs-app/#/)
+[Демо](https://silencer903.github.io/vue-inputs-app/#/)
