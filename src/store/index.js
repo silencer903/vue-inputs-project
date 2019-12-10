@@ -9,8 +9,8 @@ export default new Vuex.Store({
       {
         inputValue:0,
         label: "Контролл 1",
-        isEdit:false,
-        helper:{
+        isEdit:false,//необходим для отображения и сокрытия input
+        helper:{ // вспомогательные функции
           textHelper: "Сумма",
           functionHelper: "getSumInputs"
         }
@@ -19,10 +19,10 @@ export default new Vuex.Store({
         inputValue:0,
         label: "Контролл 2",
         isEdit:false,
-        synchValue: true,
-        sumTarget: true,
-        setConst: true,
-        setConstValue: 1000,
+        synchValue: true, // значение синхранизируется с остальными input где synchValue: true,
+        sumTarget: true, // суммирование при использовании вспомогательной функции
+        setConst: true, // вставка константы при использовании вспомогательной функции
+        setConstValue: 1000, // вставляемое значение константы при использовании вспомогательной функции
         helper:{
           textHelper: "Константа",
           functionHelper: "setConstInput"
@@ -47,6 +47,7 @@ export default new Vuex.Store({
     setNewInputsList: (state, payload) => {
       return state.inputsList = payload.inputsList;
     },
+    //синхронизация значении при вводе в input
     setSynchValues: (state, payload) => {
       state.inputsList.map((inputElement) => {
         if(inputElement.synchValue === true){
@@ -57,11 +58,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    //изменение input'ов в state
     setNewInputsListAsynch: (context, inputsList) => {
       return context.commit('setNewInputsList', {
         inputsList:inputsList
       });
     },
+    //изменение синхронных input'ов в state
     setSynchValuesAsynch: (context,synchInputsValue) => {
       return context.commit('setSynchValues', {
         synchInputsValue:synchInputsValue

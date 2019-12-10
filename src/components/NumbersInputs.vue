@@ -47,39 +47,44 @@
         },
         filters: {
             formatNumber(value) {
-                    return parseInt(value).toLocaleString('ru-RU');
+                    return parseInt(value).toLocaleString('ru-RU');// разделение на разряды
                 },
         },
         methods:{
+            //главный метод изменения input'ов в state
             changeInputs: function(data){
                 let inputsList = this.$store.getters.getInputsList;
+                //убирает браузерные нажатия tab которые выводят за предел рабочего окна
                 if(data.hasOwnProperty('event')){
                     data.event.preventDefault();
                 }
+                //если указан сохраняет значение input'а по индексу
                 if(data.hasOwnProperty('indexSave')){
                     if(data.indexSave !== null ){
                         inputsList[data.indexSave].inputValue = this.$refs.inputElements[data.indexSave].value;
                     }
                 }
+                //если указан получение правильного индекса для случаев когда index указывается < или > 0
                 if(data.hasOwnProperty('indexShow')){
                     data.indexShow = this.getValidIndex(data.indexShow);
                 }
-
+                //показ и сокрытие input
                 inputsList.map( (inputElement,ind) =>{
                     inputElement.isEdit = ind == data.indexShow;
                     return inputElement;
                 });
-
+                //сохранение всех input'ов в state
                 this.saveInputsList(inputsList).then( () => {
                     if(data.indexShow !== undefined){
                         if(inputsList[data.indexShow].isEdit){
+                            //если input показан, делает фокусировку на нем и выделяет цифры внутри
                             this.$refs.inputElements[data.indexShow].focus();
                             this.$refs.inputElements[data.indexShow].select();
                         }
                     }
                 });
             },
-
+            //функция для получения правильного индекса для случаев когда index указывается < или > 0
             getValidIndex: function(index){
                 let inputsList = this.$store.getters.getInputsList;
                 if(index > inputsList.length - 1){
@@ -90,23 +95,23 @@
                     return index;
                 }
             },
-
+            //кнопка Esc отменяет действие и скрывает input
             cancelInput: function (data){
                 this.changeInputs(data);
             },
-
+            //кнопка Enter сохраняет значение и скрывает input
             saveInput: function (data){
                 this.changeInputs(data);
             },
-
+            //Кнопка Tab сохранянет значение и переключает на следующий input
             nextInput: function (data) {
                 this.changeInputs(data);
             },
-
+            //Кнопки shift+Tab сохранянет значение и переключает на предыдущий input
             previousInput: function (data) {
                 this.changeInputs(data);
             },
-
+            //Вызывает вспомогательзую функцию которая указана в helper объекта
             executeHelperFunctions: function(data) {
                 let inputsList = this.$store.getters.getInputsList;
                 if(data.hasOwnProperty('indexHelper')){
@@ -115,7 +120,7 @@
                     }
                 }
             },
-
+            //Вспомогательная функция "Сумма", считает сумму всех input с sumTarget:true в state
             getSumInputs: function (data) {
                 if(data.hasOwnProperty('indexHelper')){
                     let inputsList = this.$store.getters.getInputsList;
@@ -134,7 +139,7 @@
                     }
                 }
             },
-
+            //Вспомогательная функция "Константа", вставляет значение указаное в state setConstValue в текущий input
             setConstInput: function (data) {
                 let inputsList = this.$store.getters.getInputsList;
                 if(data.hasOwnProperty('indexHelper')){
@@ -152,11 +157,11 @@
                     this.$refs.inputElements[data.indexHelper].select();
                 }
             },
-
+            //Сохранение inputsList в state.inputsList
             saveInputsList: function(inputsList){
                 return this.$store.dispatch('setNewInputsListAsynch',inputsList);
             },
-
+            //Запускает синхронизацию всех input с synchValue true в state
             synchInputsValues: function (value) {
                 this.$store.dispatch('setSynchValuesAsynch', value)
             }
